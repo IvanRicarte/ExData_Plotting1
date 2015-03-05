@@ -1,0 +1,17 @@
+plot3 <- function() {
+    data <- read.csv("household_power_consumption.txt",sep=";",na.strings="?",dec=".")
+    data12 <- subset(data,Date=="1/2/2007" | Date=="2/2/2007")
+    lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
+    dtchar <- paste(as.Date(data12$Date, format="%e/%m/%Y"), data12$Time)
+    dateTime <- as.vector(strptime(dtchar,format="%Y-%m-%d %T"))
+    submeter1 <- as.double(data12$Sub_metering_1)
+    submeter2 <- as.double(data12$Sub_metering_2)
+    submeter3 <- as.double(data12$Sub_metering_3)
+    png("plot3.png",width=480,height=480)
+    plot(dateTime,submeter1,type="l",xlab="",ylab="Energy sub metering")
+    lines(dateTime,submeter2,col="red")
+    lines(dateTime,submeter3,col="blue")
+    legend("topright", lty=1, col=c("black","red","blue"),legend=c("Sub metering 1", "Sub metering 2", "Sub metering 3"))
+    dev.off()
+    Sys.setlocale("LC_TIME", lct)
+}
